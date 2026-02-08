@@ -45,6 +45,8 @@ void Mesh::loadSTL(std::string filepath){
             vertex_count++;
         }
     }
+
+    Mesh::center_mesh();
 }
 
 // void Mesh::translate(const tf_vec &tf_vec){
@@ -84,22 +86,28 @@ void Mesh::loadSTL(std::string filepath){
 //     }    
 // }
 
-// void Mesh::center_mesh(){
-//     float sumx=0.0f;
-//     float sumy=0.0f;
-//     float sumz=0.0f;
+void Mesh::center_mesh(){
+    float sumx=0.0f;
+    float sumy=0.0f;
+    float sumz=0.0f;
     
-//     tf_vec center_translation;
+    tf_vec center_translation;
     
-//     for (auto pts : Mesh::meshpoints){
-//         sumx+=pts.x;
-//         sumy+=pts.y;
-//         sumz+=pts.z;
-//     }
+    for (auto pts : Mesh::meshpoints){
+        sumx+=pts.x;
+        sumy+=pts.y;
+        sumz+=pts.z;
+    }
 
-//     center_translation.x = -sumx/meshpoints.size();
-//     center_translation.y = -sumy/meshpoints.size();
-//     center_translation.z = -sumz/meshpoints.size();
-//     Mesh::translate(center_translation);
+    center_translation.x = -sumx/meshpoints.size();
+    center_translation.y = -sumy/meshpoints.size();
+    center_translation.z = -sumz/meshpoints.size();
+    // Mesh::translate(center_translation);
 
-// }
+    for (auto& pts : Mesh::meshpoints){
+        pts.x += center_translation.x;
+        pts.y += center_translation.y;
+        pts.z += center_translation.z;
+    }
+
+}
