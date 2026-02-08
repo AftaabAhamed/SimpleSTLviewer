@@ -17,7 +17,7 @@ int main(int argc, char* argv[]){
     std::string path = argv[3];
     
     Window window;
-    window.init(width, height, 16);
+    window.init(width, height, 10);
     
     Mesh mesh;
     mesh.loadSTL(path);

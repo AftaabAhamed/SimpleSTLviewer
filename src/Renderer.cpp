@@ -19,7 +19,6 @@ void Renderer::add_mesh(const Mesh &mesh){
 }
 
 void Renderer::draw_line(const point2d &p1, const point2d &p2){
-    SDL_SetRenderDrawColor(Renderer::window.renderer,2,255,2,255);
     SDL_RenderDrawLine(Renderer::window.renderer, p1.x, p1.y, p2.x, p2.y);
 }
 
@@ -67,45 +66,44 @@ void Renderer::draw_line(const point2d &p1, const point2d &p2){
 // }
 
 
-points Renderer::project2d(const vertices &vertices){
-    points p2d; 
-    p2d.reserve(vertices.size());
+point2d Renderer::project2d(const point3d &p3d){
+ 
     float f = 400.0f;
     int x0 = Renderer::window.origin[0];
     int y0 = Renderer::window.origin[1];
     
-    for(auto& point : vertices){
-        Eigen::Vector3f P(point.x, point.y, point.z);
-        
-        P = camera_rotation*P + camera_translation;
-        float X = P[0];
-        float Y = P[1];
-        float Z = P[2];
+    Eigen::Vector3f P(p3d.x, p3d.y, p3d.z);
+    
+    P = camera_rotation*P + camera_translation;
+    float X = P[0];
+    float Y = P[1];
+    float Z = P[2];
 
-        int x_ = f*(X/Z);
-        int y_ = f*(Y/Z);
+    int x_ = f*(X/Z);
+    int y_ = f*(Y/Z);
 
-        point2d point2d = {
-            .x = x_ + x0 ,
-            .y = y0 - y_ 
-        };
-        p2d.emplace_back(point2d);
-        
-    }
-    return p2d;
+   
+    return {
+        .x = x_ + x0 ,
+        .y = y0 - y_ 
+    };
 }
 
 void Renderer::draw(const Mesh &mesh){
     
-    points p2d = Renderer::project2d(mesh.meshpoints);
-    for(auto& tri : mesh.triangles){
+    SDL_SetRenderDrawColor(Renderer::window.renderer,2,255,2,255);
+
+    for(int i=0;i<mesh.meshpoints.size();i=i+3){
+
         point2d a,b,c;
-        a = p2d[tri.a];
-        b = p2d[tri.b];
-        c = p2d[tri.c];
+        // if(i>0){
+        a = project2d(mesh.meshpoints[i]);
+        b = project2d(mesh.meshpoints[i+1]);
+        c = project2d(mesh.meshpoints[i+2]);
         Renderer::draw_line(a, b);
         Renderer::draw_line(b, c);
         Renderer::draw_line(c, a);
+        // }
     }
 }
 

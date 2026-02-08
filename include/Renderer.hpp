@@ -15,7 +15,8 @@ using points = std::vector<point2d>;
 class Renderer
 {
 private:
-    points project2d(const vertices& vertices);
+    point2d project2d(const point3d &p3d);
+    // points project2d(const vertices& vertices);
     std::vector<Mesh> mesh_list;
     Window& window;
     Eigen::Vector3f camera_translation;
