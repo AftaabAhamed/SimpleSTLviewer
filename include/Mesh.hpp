@@ -28,7 +28,7 @@ class Mesh {
         void loadSTL(std::string filepath = "teapot.stl");
         // void translate(const tf_vec &tf_vec);
         // void rotate(const rot_vec &rot_vec);
-        // void center_mesh();
+        void center_mesh();
         // mesh get_mesh();
         vertices meshpoints;
         facets triangles;
